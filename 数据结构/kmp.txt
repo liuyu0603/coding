@@ -1,0 +1,46 @@
+#include<iostream>
+#include<string>
+#include<vector>
+
+using namespace std;
+
+vector<int> nextarray(string t) {
+    vector<int> next(t.length(),0);
+    next[0]=-1;
+    if (t.length()==1)return next;
+    next[1]=0;
+    int cn=0,i=2;
+    while (i<t.length()) {
+        if (t[i-1]==t[cn]) {
+            next[i++]=++cn;
+        }
+        else if (cn>0)cn=next[cn];
+            else next[i++]=0;
+    }
+    return next;
+}
+
+int kmp(string s1,string s2) {
+    int x=0,y=0;
+    vector<int> next=nextarray(s2);
+    int m=s1.length();
+    int n=s2.length();
+    while (x<m && y<n) {
+        if (s1[x]==s2[y]) {
+            x++;y++;
+        }else {
+            if (y>0)y=next[y];
+            else x++;
+        }
+    }
+    return y==n?x-y:-1;
+}
+//s1为主串，s2为模式串
+int main() {
+    string s1,s2;
+    cin>>s1>>s2;
+    int place=kmp(s1,s2);
+    vector<int> next=nextarray(s2);
+    cout<<place;
+    return 0;
+}
