@@ -1,0 +1,69 @@
+#include<iostream>
+#include <vector>
+using namespace std;
+
+typedef struct bitree {
+    int data;
+    struct bitree *lchild;
+    struct bitree *rchild;
+}bitree;
+
+vector<int>v;
+
+int idx = 0;
+bitree *createtree(const vector<int>&v,int &idx) {
+    if (idx>=v.size()||v[idx]==0) {
+        idx++;
+        return nullptr;
+    }
+    bitree *t=new bitree();
+    t->data=v[idx++];
+    t->lchild=createtree(v,idx);
+    t->rchild=createtree(v,idx);
+    return t;
+};
+
+void preorder(bitree *t) {
+    if (t==nullptr) {return;}
+    printf("%d ",t->data);
+    preorder(t->lchild);
+    preorder(t->rchild);
+}
+
+void inorder(bitree *t) {
+    if (t==nullptr) {return;}
+    inorder(t->lchild);
+    printf("%d ",t->data);
+    inorder(t->rchild);
+}
+
+void postorder(bitree *t) {
+    if (t==nullptr) {return;}
+    postorder(t->lchild);
+    postorder(t->rchild);
+    printf("%d ",t->data);
+}
+
+void destroyTree(bitree* t) {
+    if (t == nullptr) return;
+    destroyTree(t->lchild);
+    destroyTree(t->rchild);
+    delete t;   // 释放当前节点
+}
+
+int main() {
+    int x;
+    while (cin>>x)
+        v.push_back(x);
+
+    bitree *root=createtree(v,idx);
+    preorder(root);
+    printf("\n");
+    inorder(root);
+    printf("\n");
+    postorder(root);
+    printf("\n");
+
+    destroyTree(root);
+    return 0;
+}
